@@ -30,8 +30,14 @@ function leerConfig(){
     $resul[]=$cad;
     $resul[]=$usuario;
     $resul[]=$clave;
-
     return $resul;
+
+}
+
+function DBConnection(){
+    $res = leerConfig(dirname(__FILE__) . "/configuracion.xml",
+        dirname(__FILE__) . "/configuracion.xsd");
+    return new PDO($res[0], $res[1], $res[2]);
 
 }
 
