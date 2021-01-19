@@ -23,11 +23,11 @@ function checkPassword($correo, $clave)
 }
 function login()
 {
-
-
+    $mensaje=new class{};
+    $mensaje->estado=false;
 
     if (isset($_SESSION['usuario'])) {
-        echo "userExists";
+        $mensaje->mensaje="Ya hay un usuario logeado";
     } else {
         if (isset($_POST['correo']) && isset($_POST['clave']) && checkPassword($_POST['correo'], $_POST['clave'])) {
 
@@ -42,14 +42,21 @@ function login()
 
             $bd = null;
             $query = null;
-            echo "true";
+            $mensaje->estado=true;
+        }else{
+            $mensaje->mensaje="Datos incorrectos";
         }
     }
+    return json_encode($mensaje);
 }
 
-function register()
-{
+function register() {
+    $mensaje=new class{};
+
+    $mensaje->estado=false;
+
     if (!isset($_SESSION['usuario'])) {
+
         if (isset($_POST['clave']) && isset($_POST['nombre']) && isset($_POST['apellidos']) && isset($_POST['instrumento']) && isset($_POST['correo'])) {
             //Inserta en la tabla peticiones
             $encontrado = false;
@@ -91,20 +98,22 @@ function register()
                     $query->execute();
                     $commit=$bd->commit();
                     if($commit){
-                        echo "true";
+                        $mensaje->estado=true;
                     }else{
-                        echo "false";
+                        $mensaje->mensaje="Error al introducir los datos en la base de datos";
                     }
                 }else{
-                    echo "false";
+                    $mensaje->mensaje="Alumno no se encuentra en listado del colegio";
                 }
             }else{
-                echo "false";
+                $mensaje->mensaje="Alumno ya registrado";
             }
         }else{
-            echo "false";
+            $mensaje->mensaje="No se han enviado las variables del formulario correctamente";
         }
     }else{
-        echo "false";
+        $mensaje->mensaje="Cierre sesion para registrarse";
     }
+
+    return json_encode($mensaje);
 }
