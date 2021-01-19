@@ -32,8 +32,8 @@
             let clave = document.getElementById("clave").value;
             
             let login = serverController('register',[["correo",correo],["clave",clave],["nombre",nombre],["apellidos",apellidos],["instrumento",instrumento]]);
-            if(login!="true"){
-                alert("Login fallido");
+            if(login.estado==false){
+                alert(login.mensaje);
             }else{
                 ///TO-DO
                 //Redirecciona a la página siguiente, o a la pagina desde la que ha venido.

@@ -14,7 +14,8 @@ $archivoSchema="configuracion.xsd";
  */
 function leerConfig(){
     $configBD = new DOMDocument();
-    global $archivoConfig,$archivoSchema;
+    $archivoConfig=dirname(__FILE__)."/configuracion.xml";
+    $archivoSchema=dirname(__FILE__)."/configuracion.xsd";
     $configBD->load($archivoConfig);
     $cehckSchema=$configBD->schemaValidate($archivoSchema);
     if(!$cehckSchema){
@@ -22,14 +23,14 @@ function leerConfig(){
     }
     $datosConfig=simplexml_load_file($archivoConfig);
     $ip=$datosConfig->xpath("//ip");
-    $nombre=$datosConfig->xpath("//ip");
-    $usuario=$datosConfig->xpath("//ip");
-    $clave=$datosConfig->xpath("//ip");
+    $nombre=$datosConfig->xpath("//nombre");
+    $usuario=$datosConfig->xpath("//usuario");
+    $clave=$datosConfig->xpath("//clave");
     $cad = sprintf("mysql:dbname=%s;host=%s", $nombre[0], $ip[0]);
-    $resul = array();
+    $resul = [];
     $resul[]=$cad;
-    $resul[]=$usuario;
-    $resul[]=$clave;
+    $resul[]=$usuario[0];
+    $resul[]=$clave[0];
     return $resul;
 
 }

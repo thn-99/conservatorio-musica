@@ -65,8 +65,8 @@ function register() {
             $query = $bd->prepare("select count(*) from alumnos where correo = :correo");
             $query->bindParam(':correo', $_POST['correo']);
             $query->execute();
-            if ($query->rowCount() == 1) {
-                $encontrado = true;
+            if ($query->rowCount() == 0) {
+                $encontrado = false;
             }
             if ($encontrado == false) {
 

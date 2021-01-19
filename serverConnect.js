@@ -18,5 +18,9 @@ function serverController(funcion, postArray) {
     }
     xhttp.send(postMessage);
     console.log(devol);
-    return devol;
+    if(devol){
+        return JSON.parse(devol);
+    }else{
+        return JSON.parse("{'estado':false,'mensaje':'Sin respuesta del servidor'");
+    }
 }
