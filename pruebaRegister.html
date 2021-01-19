@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conservatorio Música</title>
+</head>
+<body>
+    <!-- 
+        TO-DO
+        RENOMBRAR A login.html
+    -->
+    <h1>Conservatorio Música</h1>
+
+    <div id="login">
+        Nombre: <input type="text" id="nombre">
+        Apellidos:<input type="text" id="apellidos">
+        Instrumento:<input type="text" id="instrumento">
+        Correo: <input type="text" id="correo">
+        Contraseña: <input type="text" id="clave">
+        <input type="button" value="Identificarse" onclick="login()">
+    </div>
+    <script src="serverConnect.js"></script>
+    <script>
+        function login(){
+            let nombre = document.getElementById("nombre").value;
+            let apellidos = document.getElementById("apellidos").value;
+            let instrumento = document.getElementById("instrumento").value;
+
+            let correo = document.getElementById("correo").value;
+
+            let clave = document.getElementById("clave").value;
+            
+            let login = serverController('register',[["correo",correo],["clave",clave],["nombre",nombre],["apellidos",apellidos],["instrumento",instrumento]]);
+            if(login!="true"){
+                alert("Login fallido");
+            }else{
+                ///TO-DO
+                //Redirecciona a la página siguiente, o a la pagina desde la que ha venido.
+
+            }
+          
+        }
+    </script>
+</body>
+</html>
