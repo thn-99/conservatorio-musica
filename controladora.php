@@ -11,7 +11,11 @@
                 require_once 'alumnos.php';
                 login();
             break;
-
+            
+            case 'todasCabinas':
+                require_once 'reservas.php';
+                consultaCabinas();
+            break;
             case 'compruebaSesion':
                 $mensaje=new class{};
 
