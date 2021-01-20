@@ -1,37 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Conservatorio Música</title>
-</head>
-<body>
-    <!-- 
-        TO-DO
-        RENOMBRAR A login.html
-    -->
-    <h1>Conservatorio Música</h1>
-
-    <div id="login">
-        Correo: <input type="text" id="usuario">
-        Contraseña: <input type="text" id="clave">
-        <input type="button" value="Identificarse" onclick="login()">
-    </div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css">
     <script src="serverConnect.js"></script>
-    <script>
-        function login(){
-            let correo = document.getElementById("usuario").value;
-            let clave = document.getElementById("clave").value;
-            let login = serverController('login',[["correo",correo],["clave",clave]]);
-            if(login!="true"){
-                alert("Login fallido");
-            }else{
-                ///TO-DO
-                //Redirecciona a la página siguiente, o a la pagina desde la que ha venido.
+    <script src="languages.js"></script>
+    <script src="master.js"></script>
+</head>
+<body id="body">
+    <div id="navegacion">
 
-            }
-          
-        }
+    </div>
+
+    <div class="container" id="app">
+
+    </div>
+    <script>
+        console.log(textSignIn);
+        navbar();
+        loginForm();
     </script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>

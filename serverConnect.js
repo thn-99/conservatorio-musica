@@ -21,6 +21,6 @@ function serverController(funcion, postArray) {
     if(devol){
         return JSON.parse(devol);
     }else{
-        return JSON.parse("{'estado':false,'mensaje':'Sin respuesta del servidor'");
+        return JSON.parse("{'estado':false,'mensaje':'Respuesta vacia por parte del servidor'");
     }
 }

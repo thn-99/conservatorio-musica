@@ -10,15 +10,13 @@ function checkPassword($correo, $clave)
     $query = $bd->prepare("select hashClave from alumnos where correo = :correo");
     $query->bindParam(':correo', $correo);
     $query->execute();
-
     if ($query->rowCount() == 1) {
-        if (password_verify($clave, $query->fetch())) {
+        if (password_verify($clave, $query->fetch()[0])) {
             return true;
         }
     }
     $bd = null;
     $query = null;
-
     return false;
 }
 function login()
@@ -30,7 +28,6 @@ function login()
         $mensaje->mensaje="Ya hay un usuario logeado";
     } else {
         if (isset($_POST['correo']) && isset($_POST['clave']) && checkPassword($_POST['correo'], $_POST['clave'])) {
-
             $bd = DBConnection();
 
             $query = $bd->prepare("select id,nombre,apellidos,instrumento,correo from alumnos where correo= :usuario");
@@ -47,7 +44,7 @@ function login()
             $mensaje->mensaje="Datos incorrectos";
         }
     }
-    return json_encode($mensaje);
+    echo json_encode($mensaje);
 }
 
 function register() {
@@ -117,3 +114,4 @@ function register() {
 
     return json_encode($mensaje);
 }
+
