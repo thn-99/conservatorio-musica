@@ -1,5 +1,5 @@
-let usuario;
 function navbar(){
+    let usuario= sesionUsuario();
     let body = document.getElementById("navegacion")
     let nav = `
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -13,15 +13,8 @@ function navbar(){
         <li class="nav-item active">
           <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-            ${!sesionUsuario()?
-            '<li class="nav-item"> Iniciar Sesion </li>':
-            '<li class="nav-item"> <a class="nav-link disabled" href="#">Usuario'+usuario+'</a> </li> <li class="nav-item"> Cerrar Sesión </li>'}
+            ${usuario==false?'<li class="nav-item"> <a class="nav-link disabled" href="#">Iniciar Sesion</a></li>':'<li class="nav-item"> <a class="nav-link disabled" href="#">Usuario: '+usuario+'</a> </li> <li class="nav-item"><a class="nav-link" href="#">Cerrar Sesion</a></li>'}
           
-        </li>
       </ul>
     </div>
     <form class="form-inline my-2 my-lg-0">
@@ -101,10 +94,19 @@ function login(){
 
 function sesionUsuario(){
     let respuesta = serverController('compruebaSesion');
-    if(respuesta.estado=="true"){
-        usuario = respuesta.mensaje;
-        return true;
+    console.log(respuesta);
+    if(respuesta.estado==true){
+        return respuesta.mensaje;  
     }else{
         return false;
     }
 }
+
+
+function mostarCabinas(){
+
+    let fecha = document.getElementById("fecha").value;
+    let cabinas = serverController('todasCabinas',[['fecha',fecha]]);
+
+}
+
