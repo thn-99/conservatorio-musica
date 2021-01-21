@@ -10,7 +10,7 @@ let textNotAMember;
 let textRegister;
 let textMail;
 let textPassw;
-
+let textName;
 
 switch(language){
     case 'en':
@@ -21,9 +21,11 @@ switch(language){
         textRegister='Register';
         textMail='Email';
         textPassw='Password';
+        textName='Name';
     break;
 
     case 'es':
+        textName='Nombre';
         textSignIn='Iniciar Sesión';
         textHome='Casa';
         textFgtPass='Contaseña olvidada?';

@@ -1,15 +1,16 @@
-var puerta="todas";
-var tipo="todas";
-var fecha=false;
-var planta="todas";
-var hora="todas";
+var puerta = "todas";
+var tipo = "todas";
+var fecha = false;
+var planta;
+var hora = "todas";
 var usuario = sesionUsuario();
+var todasCabinas;
 
-function main(){
-    if(!usuario){
+function main() {
+    if (!usuario) {
         navbar();
         loginForm();
-    }else{
+    } else {
         navbar();
         reservasCabinas();
     }
@@ -43,15 +44,6 @@ function navbar() {
 }
 
 function loginForm() {
-    let nose = `<h1>Conservatorio Música</h1>
-
-    <div id="login">
-        Correo: <input type="text" id="usuario">
-        Contraseña: <input type="text" id="clave">
-        <input type="button" value="Identificarse" onclick="login()">
-    </div>0`;
-
-
     let loginForm = `
             <div class="row mb-4">
             <div class="col-sm-12 d-flex justify-content-center">
@@ -94,10 +86,14 @@ function loginForm() {
 
 
 }
+
 function login() {
     let correo = document.getElementById("correo").value;
     let clave = document.getElementById("clave").value;
-    let respuesta = serverController('login', [["correo", correo], ["clave", clave]]);
+    let respuesta = serverController('login', [
+        ["correo", correo],
+        ["clave", clave]
+    ]);
     console.log(respuesta);
     if (respuesta.estado != "true") {
         location.reload();
@@ -105,6 +101,75 @@ function login() {
         alert(correcto);
         return false;
     }
+}
+
+function registerForm() {
+    let registerForm = `
+      <div class="row mb-4">
+        <div class="col-sm-12 d-flex justify-content-center">
+          <h2>${textSignIn}</h2>
+        </div>
+      </div>
+
+      <div>
+      <div class="form-row justify-content-center mb-4">
+          <div class="col-sm-4">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="${textName}"
+              id="nombre"
+            />
+          </div>
+        </div>
+        <div class="form-row justify-content-center mb-4">
+          <div class="col-sm-4">
+            <input
+              type="email"
+              class="form-control"
+              placeholder="${textMail}"
+              id="correo"
+            />
+          </div>
+        </div>
+        <div class="form-row justify-content-center mb-4">
+          <div class="col-sm-4">
+            <input
+              type="password"
+              class="form-control"
+              placeholder="${textPassw}"
+              id="clave"
+            />
+          </div>
+        </div>
+        <div class="form-row justify-content-center mb-4">
+          <div class="col-sm-4">
+            <input
+              type="password"
+              class="form-control"
+              placeholder="${textPassw}"
+              id="clave"
+            />
+          </div>
+        </div>
+        <div class="row mb-4">
+          <div class="col-sm-12 d-flex justify-content-center">
+            <a href="#">${textFgtPass}</a>
+          </div>
+        </div>
+
+        <div class="row mb-2 justify-content-center">
+          <button class="col-sm-2 btn btn-info" onclick="login()">
+            ${textSignIn}
+          </button>
+        </div>
+        <div class="row mb-2 ">
+          <div class="col-sm-12 d-flex justify-content-center">
+            <span>${textNotAMember} </span><a href="#">${textRegister}</a>
+          </div>
+        </div>
+      </div>
+    `;
 }
 
 
@@ -182,90 +247,121 @@ function reservasCabinas() {
     </div>
 
     `;
-    document.getElementById("app").innerHTML=contenedor;
-    for (let index = 1; index <= 31; index++) {
-        document.getElementById("puerta").innerHTML+=`<option value="${index}">Puerta ${index}</option>`;
-    }
+    document.getElementById("app").innerHTML = contenedor;
+
     mostarCabinas();
 }
 
 function mostarCabinas() {
+    if (filtroFecha()) {
+        todasCabinas = serverController('todasCabinas', [
+            ['fecha', fecha]
+        ]);
+    }
     filtroPuerta();
     filtroTipo();
     filtroPlanta();
-    if(filtroFecha()){
-    todasCabinas = serverController('todasCabinas', [['fecha', fecha]]);
-    }
 
-    var res = Object.values(todasCabinas.mensaje).reduce((acc, val)=> acc + cabinaTemplate(val),"");
-    if(todasCabinas.estado==true){
-        document.getElementById("tbody").innerHTML=res;
-    }
 
+    var res = Object.values(todasCabinas.mensaje).reduce((acc, val) => acc + cabinaTemplate(val), "");
+    if (todasCabinas.estado == true) {
+        document.getElementById("tbody").innerHTML = res;
+    }
+    
+    document.querySelectorAll('.botonReserva').forEach(element => {
+        element.onclick=reservar;
+    });
 }
-function filtroFecha(){
+
+function filtroFecha() {
     let fechaInput;
-    if(document.getElementById("fecha").value){
-        fechaInput=document.getElementById("fecha").value;
+    if (document.getElementById("fecha").value) {
+        fechaInput = document.getElementById("fecha").value;
     }
 
-    if(fecha && fechaInput && fecha!=fechaInput){
+    if (fecha && fechaInput && fecha != fechaInput) {
         fecha = fechaInput;
         return true;
-    }else if(!fecha){
+    } else if (!fecha) {
         fecha = new Date().toISOString().slice(0, 10);
         return true;
     }
     return false;
 }
 
-function filtroPuerta(){
+function filtroPuerta() {
     let puertaInput;
     console.log(puerta);
-     if(document.getElementById("puerta").value){
-        puertaInput=document.getElementById("puerta").value;
+    if (document.getElementById("puerta").value) {
+        puertaInput = document.getElementById("puerta").value;
     }
-    if(puertaInput && puerta!=puertaInput){
-        puerta=puertaInput;
+    if (puertaInput && puerta != puertaInput) {
+        puerta = puertaInput;
     }
 }
 
-function filtroTipo(){
+function filtroTipo() {
     let tipoInput;
-    if(document.getElementById("tipo").value){
-        tipoInput=document.getElementById("tipo").value;
+    if (document.getElementById("tipo").value) {
+        tipoInput = document.getElementById("tipo").value;
     }
-    if(tipoInput && tipo!=tipoInput){
-        tipo=tipoInput;
+    if (tipoInput && tipo != tipoInput) {
+        tipo = tipoInput;
     }
 }
 
-function filtroPlanta(){
+function filtroPlanta() {
     let plantaInput;
-    
-    if(document.getElementById("planta").value){
-        plantaInput=document.getElementById("planta").value;
+
+    if (document.getElementById("planta").value) {
+        plantaInput = document.getElementById("planta").value;
     }
-    if(plantaInput && planta!=plantaInput){
-        planta=plantaInput;
+    if (plantaInput && planta != plantaInput) {
+        planta = plantaInput;
+        let puertas = new Array();
+        if (planta == "todas") {
+            document.getElementById("puerta").innerHTML = `<option value="todas" selected>Todas</option>`;
+            for (let index = 1; index <= 31; index++) {
+                document.getElementById("puerta").innerHTML += `<option value="${index}">Puerta ${index}</option>`;
+            }
+        } else {
+            todasCabinas.mensaje.forEach(cabina => {
+                if (cabina.planta == planta) {
+                    if (!puertas.includes(cabina.id)) {
+                        puertas.push(cabina.id);
+                    }
+                }
+            });
+            document.getElementById("puerta").innerHTML = `<option value="todas" selected>Todas</option>`;
+            puertas.forEach(puerta => {
+                document.getElementById("puerta").innerHTML += `<option value="${puerta}">Puerta ${puerta}</option>`;
+            });
+
+        }
+
+
+
     }
     console.log(planta);
 }
 
-function cabinaTemplate(cabina){
-    if( (puerta=="todas" || puerta==cabina.id)  &&  (tipo=="todas" || tipo==cabina.tipo)  &&  (planta=="todas" || planta==cabina.planta) ){
-    return `
+function cabinaTemplate(cabina) {
+    if ((puerta == "todas" || puerta == cabina.id) && (tipo == "todas" || tipo == cabina.tipo) && (planta == "todas" || planta == cabina.planta)) {
+        return `
     <tr">
         <td>${cabina.id}</td>
         <td>${cabina.tipo}</td>
         <td>${cabina.planta}</td>
         <td>${cabina.horas}</td>
-        <td><button type="button" class="btn btn-warning">Comprar</button></td>
+        <td><button id="puerta-${cabina.id}" type="button" class="btn btn-warning botonReserva">Comprar</button></td>
     </tr>
     `;
-    }else{
-       return ``;
+    } else {
+        return ``;
     }
 
 }
 
+function reservar(evento){
+    alert(evento.target.id);
+}
