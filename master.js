@@ -8,10 +8,11 @@ var todasCabinas;
 
 function main() {
     if (!usuario) {
-        navbar();
-        loginForm();
+        //navbar();
+        //loginForm();
+        registerForm();
     } else {
-        navbar();
+        
         reservasCabinas();
     }
 }
@@ -40,10 +41,11 @@ function navbar() {
       </form>
   </nav>
   `;
-    body.innerHTML += nav;
+    body.innerHTML = nav;
 }
 
 function loginForm() {
+    navbar();
     let loginForm = `
             <div class="row mb-4">
             <div class="col-sm-12 d-flex justify-content-center">
@@ -75,14 +77,14 @@ function loginForm() {
             </div>
             <div class="row mb-2 ">
                 <div class="col-sm-12 d-flex justify-content-center">
-                    <span>${textNotAMember} </span><a href="#">${textRegister}</a>
+                    <span>${textNotAMember} </span><a href="#" onclick="registerForm()">${textRegister}</a>
                 </div>
             </div>
 
         </div>
     `;
 
-    document.getElementById("app").innerHTML += loginForm;
+    document.getElementById("app").innerHTML = loginForm;
 
 
 }
@@ -96,14 +98,15 @@ function login() {
     ]);
     console.log(respuesta);
     if (respuesta.estado != "true") {
-        location.reload();
+        reservasCabinas();
     } else {
-        alert(correcto);
+        alert("Mal");
         return false;
     }
 }
 
 function registerForm() {
+    navbar();
     let registerForm = `
       <div class="row mb-4">
         <div class="col-sm-12 d-flex justify-content-center">
@@ -112,13 +115,34 @@ function registerForm() {
       </div>
 
       <div>
-      <div class="form-row justify-content-center mb-4">
+        <div class="form-row justify-content-center mb-4">
           <div class="col-sm-4">
             <input
               type="text"
               class="form-control"
               placeholder="${textName}"
               id="nombre"
+            />
+          </div>
+        </div>
+
+        <div class="form-row justify-content-center mb-4">
+          <div class="col-sm-4">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Apellido"
+              id="apellidos"
+            />
+          </div>
+        </div>
+        <div class="form-row justify-content-center mb-4">
+          <div class="col-sm-4">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Instrumento"
+              id="instrumento"
             />
           </div>
         </div>
@@ -142,34 +166,20 @@ function registerForm() {
             />
           </div>
         </div>
-        <div class="form-row justify-content-center mb-4">
-          <div class="col-sm-4">
-            <input
-              type="password"
-              class="form-control"
-              placeholder="${textPassw}"
-              id="clave"
-            />
-          </div>
-        </div>
-        <div class="row mb-4">
-          <div class="col-sm-12 d-flex justify-content-center">
-            <a href="#">${textFgtPass}</a>
-          </div>
-        </div>
-
         <div class="row mb-2 justify-content-center">
           <button class="col-sm-2 btn btn-info" onclick="login()">
-            ${textSignIn}
+            Registrarse
           </button>
         </div>
+
         <div class="row mb-2 ">
           <div class="col-sm-12 d-flex justify-content-center">
-            <span>${textNotAMember} </span><a href="#">${textRegister}</a>
+            <span>Ya estás registrado?</span><a href="#" onclick="loginForm()">${textSignIn}</a>
           </div>
         </div>
       </div>
     `;
+    document.getElementById("app").innerHTML=registerForm;
 }
 
 
@@ -185,6 +195,7 @@ function sesionUsuario() {
 
 
 function reservasCabinas() {
+    navbar();
     let contenedor = `
     <div class="card">
     <div class="card-header bg-primary text-white">
@@ -263,7 +274,7 @@ function mostarCabinas() {
     filtroPlanta();
 
 
-    var res = Object.values(todasCabinas.mensaje).reduce((acc, val) => acc + cabinaTemplate(val), "");
+    let res = Object.values(todasCabinas.mensaje).reduce((acc, val) => acc + cabinaTemplate(val), "");
     if (todasCabinas.estado == true) {
         document.getElementById("tbody").innerHTML = res;
     }
@@ -364,4 +375,8 @@ function cabinaTemplate(cabina) {
 
 function reservar(evento){
     alert(evento.target.id);
+}
+
+function reservarForm(){
+    let reservaForm = `gfh`;
 }

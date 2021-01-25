@@ -33,6 +33,8 @@ switch(language){
         textRegister='Registrate';
         textMail='Email';
         textPassw='Contaseña';
+        textName='Nombre';
+
     break;
 }
 
