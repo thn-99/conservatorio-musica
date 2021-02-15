@@ -1,0 +1,157 @@
+[
+    {
+        "id": "1",
+        "planta": "1",
+        "tipo": "general"
+    },
+    {
+        "id": "2",
+        "planta": "1",
+        "tipo": "general"
+    },
+    {
+        "id": "3",
+        "planta": "1",
+        "tipo": "general"
+    },
+    {
+        "id": "4",
+        "planta": "1",
+        "tipo": "general"
+    },
+    {
+        "id": "5",
+        "planta": "1",
+        "tipo": "general"
+    },
+    {
+        "id": "6",
+        "planta": "1",
+        "tipo": "general"
+    },
+    {
+        "id": "7",
+        "planta": "1",
+        "tipo": "general"
+    },
+    {
+        "id": "8",
+        "planta": "1",
+        "tipo": "arpa"
+    },
+    {
+        "id": "9",
+        "planta": "1",
+        "tipo": "canto"
+    },
+    {
+        "id": "10",
+        "planta": "1",
+        "tipo": "precusion"
+    },
+    {
+        "id": "11",
+        "planta": "1",
+        "tipo": "precusion"
+    },
+    {
+        "id": "12",
+        "planta": "1",
+        "tipo": "jazz"
+    },
+    {
+        "id": "13",
+        "planta": "1",
+        "tipo": "camara"
+    },
+    {
+        "id": "14",
+        "planta": "2",
+        "tipo": "general"
+    },
+    {
+        "id": "15",
+        "planta": "2",
+        "tipo": "general"
+    },
+    {
+        "id": "16",
+        "planta": "2",
+        "tipo": "general"
+    },
+    {
+        "id": "17",
+        "planta": "2",
+        "tipo": "general"
+    },
+    {
+        "id": "18",
+        "planta": "2",
+        "tipo": "general"
+    },
+    {
+        "id": "19",
+        "planta": "2",
+        "tipo": "general"
+    },
+    {
+        "id": "20",
+        "planta": "2",
+        "tipo": "general"
+    },
+    {
+        "id": "21",
+        "planta": "2",
+        "tipo": "general"
+    },
+    {
+        "id": "22",
+        "planta": "3",
+        "tipo": "general"
+    },
+    {
+        "id": "23",
+        "planta": "3",
+        "tipo": "general"
+    },
+    {
+        "id": "24",
+        "planta": "3",
+        "tipo": "general"
+    },
+    {
+        "id": "25",
+        "planta": "3",
+        "tipo": "general"
+    },
+    {
+        "id": "26",
+        "planta": "3",
+        "tipo": "general"
+    },
+    {
+        "id": "27",
+        "planta": "3",
+        "tipo": "general"
+    },
+    {
+        "id": "28",
+        "planta": "3",
+        "tipo": "general"
+    },
+    {
+        "id": "29",
+        "planta": "3",
+        "tipo": "general"
+    },
+    {
+        "id": "30",
+        "planta": "3",
+        "tipo": "general"
+    },
+    {
+        "id": "31",
+        "planta": "3",
+        "tipo": "general"
+    }
+]

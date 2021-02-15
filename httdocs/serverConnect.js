@@ -1,4 +1,4 @@
-function serverController(funcion, postArray) {
+function serverController(funcion, postArray=null) {
     //postArray es de la forma: [nombre,valor],[nombre,valor]
     let xhttp = new XMLHttpRequest();
     let devol;
