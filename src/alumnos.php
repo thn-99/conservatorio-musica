@@ -1,74 +1,122 @@
 <?php
 
-require_once 'bd.php';
+require_once __DIR__ . '/../bootstrap.php';
+require_once __DIR__ . '/Entity/Alumnos.php';
 
 
-
-function checkPassword($correo, $clave)
+/**
+ * checkPassword
+ *
+ * @param string $clave Conrtraseña recibida
+ * @param  string $claveHash Contraseña en hash del usuario
+ * @return boolean
+ */
+function checkPassword($clave, $claveHash)
 {
-    $bd = DBConnection();
-    $query = $bd->prepare("select hashClave from alumnos where correo = :correo");
-    $query->bindParam(':correo', $correo);
-    $query->execute();
-    if ($query->rowCount() == 1) {
-        if (password_verify($clave, $query->fetch()[0])) {
-            return true;
-        }
+    if (password_verify($clave, $claveHash)) {
+        return true;
     }
-    $bd = null;
-    $query = null;
+
     return false;
 }
+
+/**
+ * Cambia contraseña de un alumno
+ *
+ * @return void
+ */
+function changePass()
+{
+    $mensaje = new stdClass();
+    $mensaje->estado = false;
+
+    if (isset($_SESSION['id'])) {
+        if (isset($_POST['oldPass']) && isset($_POST['newPass'])) {
+            $entity = getEntityManager();
+            $alumno = $entity->find("Alumnos", $_SESSION['id']);
+            if (password_verify($_POST['oldPass'], $alumno->getHashclave())) {
+                if ($_POST['oldPass'] != $_POST['newPass']) {
+                    $hashClave = password_hash($_POST['newPass'], PASSWORD_DEFAULT, ["cost" => 14]);
+
+                    $alumno->setHashclave($hashClave);
+
+                    $entity->persist($alumno);
+                    $entity->flush();
+                    session_unset();
+                    $mensaje->estado = true;
+                } else {
+                    $mensaje->mensaje = "Las nueva contraseña coincide con la nueva";
+                }
+            } else {
+                $mensaje->mensaje = "Contraseña incorrecta";
+            }
+        } else {
+            $mensaje->mensaje = "Ponga ambas contraseñas";
+        }
+    } else {
+        $mensaje->mensaje = "Sesion no iniciada";
+    }
+}
+
+
+/**
+ * Comprueba el login de un alumno
+ *
+ */
 function login()
 {
-    $mensaje=new class{};
-    $mensaje->estado=false;
-
+    $mensaje = new class
+    {
+    };
+    $mensaje->estado = false;
     if (isset($_SESSION['usuario'])) {
-        $mensaje->mensaje="Ya hay un usuario logeado";
+        $mensaje->mensaje = "Ya hay un usuario logeado";
     } else {
-        if (isset($_POST['correo']) && isset($_POST['clave']) && checkPassword($_POST['correo'], $_POST['clave'])) {
-            $bd = DBConnection();
+        if (isset($_POST['correo']) && isset($_POST['clave'])) {
+            $entity = getEntityManager();
+            $alumnoBD = $entity->getRepository("Alumnos")->findOneBy(array('correo' => $_POST['correo']));
+            if ($alumnoBD) {
 
-            $query = $bd->prepare("select id,nombre,apellidos,instrumento,correo from alumnos where correo= :usuario");
 
-            $query->bindParam(':usuario', $_POST['correo']);
-            $query->execute();
+                if (checkPassword($_POST['clave'], $alumnoBD->getHashclave())) {
+                    $_SESSION['nombre'] = $alumnoBD->getNombre();
+                    $_SESSION['id'] = $alumnoBD->getId();
 
-            $_SESSION['usuario'] = $query->fetch();
-
-            $bd = null;
-            $query = null;
-            $mensaje->estado=true;
-        }else{
-            $mensaje->mensaje="Datos incorrectos";
+                    $mensaje->estado = true;
+                } else {
+                    $mensaje->mensaje = "Contraseña incorrecta";
+                }
+            } else {
+                $mensaje->mensaje = "Alumno no existe";
+            }
+        } else {
+            $mensaje->mensaje = "Datos incorrectos";
         }
     }
     echo json_encode($mensaje);
 }
 
-function register() {
-    $mensaje=new class{};
+/**
+ * Registra un usuario
+ *
+ */
+function register()
+{
+    $mensaje = new class
+    {
+    };
 
-    $mensaje->estado=false;
+    $mensaje->estado = false;
 
     if (!isset($_SESSION['usuario'])) {
 
         if (isset($_POST['clave']) && isset($_POST['nombre']) && isset($_POST['apellidos']) && isset($_POST['instrumento']) && isset($_POST['correo'])) {
             //Inserta en la tabla peticiones
-            $encontrado = false;
+            $entity = getEntityManager();
+            $encontrado = $entity->getRepository("Alumnos")->findOneBy(array('correo' => $_POST['correo']));
 
-            $bd = DBConnection();
-            $query = $bd->prepare("select count(*) from alumnos where correo = :correo");
-            $query->bindParam(':correo', $_POST['correo']);
-            $query->execute();
-            if ($query->rowCount() == 0) {
-                $encontrado = false;
-            }
-            if ($encontrado == false) {
-
-                $alumnos = fopen("alumnos.txt", "r") or die("Unable to open file!");
-
+            if ($encontrado == null) {
+                $alumnos = fopen("../alumnos.txt", "r") or die("Unable to open file!");
                 while (!feof($alumnos)) {
                     $alumno = explode(";", fgets($alumnos));
                     if (
@@ -84,34 +132,27 @@ function register() {
                 fclose($alumnos);
 
                 if ($encontrado = true) {
-                    $bd->beginTransaction();
-                    $query = $bd->prepare("INSERT INTO alumnos(nombre,apellidos,instrumento,correo,hashClave) VALUES(:nombre,:apellidos,:instrumento,:correo,:hashClave)");
-                    $query->bindParam(":nombre", $_POST['nombre']);
-                    $query->bindParam(":apellidos", $_POST['apellidos']);
-                    $query->bindParam(":instrumento", $_POST['instrumento']);
-                    $query->bindParam(":correo", $_POST['correo']);
                     $hashClave = password_hash($_POST['clave'], PASSWORD_DEFAULT, ["cost" => 14]);
-                    $query->bindParam(":hashClave", $hashClave);
-                    $query->execute();
-                    $commit=$bd->commit();
-                    if($commit){
-                        $mensaje->estado=true;
-                    }else{
-                        $mensaje->mensaje="Error al introducir los datos en la base de datos";
+                    $alumnoBD = new Alumnos($_POST['nombre'], $_POST['apellidos'], $_POST['instrumento'], $_POST['correo'], $hashClave);
+                    $entity->persist($alumnoBD);
+                    try {
+                        $entity->flush();
+                        $mensaje->estado = true;
+                    } catch (Exception $e) {
+                        $mensaje->mensaje = $e->getMessage();
                     }
-                }else{
-                    $mensaje->mensaje="Alumno no se encuentra en listado del colegio";
+                } else {
+                    $mensaje->mensaje = "Alumno no se encuentra en listado del colegio";
                 }
-            }else{
-                $mensaje->mensaje="Alumno ya registrado";
+            } else {
+                $mensaje->mensaje = "Alumno ya registrado";
             }
-        }else{
-            $mensaje->mensaje="No se han enviado las variables del formulario correctamente";
+        } else {
+            $mensaje->mensaje = "No se han enviado las variables del formulario correctamente";
         }
-    }else{
-        $mensaje->mensaje="Cierre sesion para registrarse";
+    } else {
+        $mensaje->mensaje = "Cierre sesion para registrarse";
     }
 
-    return json_encode($mensaje);
+    echo json_encode($mensaje);
 }
-

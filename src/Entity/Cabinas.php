@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="cabinas", indexes={@ORM\Index(name="planta", columns={"planta"})})
  * @ORM\Entity
  */
-class Cabinas
+class Cabinas implements JsonSerializable
 {
     /**
      * @var int
@@ -34,6 +34,10 @@ class Cabinas
      * @ORM\Column(name="tipo", type="string", length=15, nullable=false)
      */
     private $tipo;
+    
+    public function jsonSerialize(){
+        return ["id"=>$this->id,"planta"=>$this->planta,"tipo"=>$this->tipo];
+    }
 
 
 }

@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<configuracion>
+<!-- <configuracion>
     <ip>localhost</ip>
-    <nombre>lajnaweb_dbtahseen</nombre>
-    <usuario>lajnaweb_userT</usuario>
-    <clave>Hacker.54321</clave>
+    <nombre>tahseen_servidor</nombre>
+    <usuario>tahseen_servidor</usuario>
+    <clave>Tahseen12345</clave>
+</configuracion> -->
+
+<configuracion>
+    <ip>127.0.0.1</ip>
+    <nombre>tahseen_servidor</nombre>
+    <usuario>root</usuario>
+    <clave></clave>
 </configuracion>

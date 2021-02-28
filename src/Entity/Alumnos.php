@@ -56,5 +56,96 @@ class Alumnos
      */
     private $hashclave;
 
+    function __construct($nombre,$apellidos,$instrumento,$correo,$hashclave)
+    {
+        $this->nombre=$nombre;
+        $this->apellidos=$apellidos;
+        $this->instrumento=$instrumento;
+        $this->correo=$correo;
+        $this->hashclave=$hashclave;
+    }
 
+    /**
+     * Get the value of correo
+     */
+    public function getCorreo()
+    {
+        return $this->correo;
+    }
+
+    /**
+     * Set the value of correo
+     *
+     * @return self
+     */
+    public function setCorreo($correo) : self
+    {
+        $this->correo = $correo;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of hashclave
+     */
+    public function getHashclave()
+    {
+        return $this->hashclave;
+    }
+
+    /**
+     * Set the value of hashclave
+     *
+     * @return self
+     */
+    public function setHashclave($hashclave) : self
+    {
+        $this->hashclave = $hashclave;
+
+        return $this;
+    }
+    public function __sleep()
+    {
+        return array();
+    }
+
+    /**
+     * Get the value of nombre
+     */
+    public function getNombre()
+    {
+        return $this->nombre;
+    }
+
+    /**
+     * Set the value of nombre
+     *
+     * @return self
+     */
+    public function setNombre($nombre) : self
+    {
+        $this->nombre = $nombre;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of id
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the value of id
+     *
+     * @return self
+     */
+    public function setId($id) : self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
 }

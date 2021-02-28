@@ -2,16 +2,17 @@
 require_once 'Alumnos.php';
 require_once 'Cabinas.php';
 
+
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\JoinColumn;
 /**
- * Reservas
+ * ReservaCamara
  *
- * @ORM\Table(name="reservas", indexes={@ORM\Index(name="idCabina", columns={"idCabina"}), @ORM\Index(name="idAlumno", columns={"idAlumno"})})
+ * @ORM\Table(name="reservacamara", indexes={@ORM\Index(name="idCabina", columns={"idCabina"}), @ORM\Index(name="idAlumno", columns={"idAlumno"})})
  * @ORM\Entity
  */
-class Reservas implements JsonSerializable
+class ReservaCamara implements JsonSerializable
 {
     /**
      * @var int
@@ -27,6 +28,18 @@ class Reservas implements JsonSerializable
      * @JoinColumn(name="idAlumno", referencedColumnName="id")
      */
     private $idalumno;
+
+    /**
+     * @ManyToOne(targetEntity="Alumnos")
+     * @JoinColumn(name="alumno2", referencedColumnName="id")
+     */
+    private $alumno2;
+
+    /**
+     * @ManyToOne(targetEntity="Alumnos")
+     * @JoinColumn(name="alumno3", referencedColumnName="id")
+     */
+    private $alumno3;
 
     /**
      * @ManyToOne(targetEntity="Cabinas")
@@ -47,14 +60,15 @@ class Reservas implements JsonSerializable
      */
     private $hora;
 
-    function __construct($idalumno=null,$idcabina=null,$fecha=null,$hora=null)
+    function __construct($idalumno=null,$alumno2=null,$alumno3=null,$idcabina=null,$fecha=null,$hora=null)
     {
         $this->idalumno=$idalumno;
+        $this->alumno2=$alumno2;
+        $this->alumno3=$alumno3;
         $this->idcabina=$idcabina;
         $this->fecha=$fecha;
         $this->hora=$hora;
     }
-
 
 
     /**
@@ -76,19 +90,11 @@ class Reservas implements JsonSerializable
 
         return $this;
     }
-    public function copia(){
-        $copia = new stdClass();
-        $copia->puerta=$this->idcabina;
-        $copia->fecha=$this->fecha->format('Y-m-d');
-        $copia->hora=$this->hora;
-        //$copia->hora=$this->hora;
-        return $copia;
-    }
 
     public function jsonSerialize()
     {
         
-        return ["id"=>$this->id,"puerta"=>$this->idcabina,"fecha"=>$this->fecha->format('Y-m-d'),"hora"=>$this->hora->format('H:i:s')];
+        return ["id"=>$this->id,"alumno"=>$this->idalumno->getNombre(),"alumno2"=>$this->alumno2->getNombre(),"alumno3"=>$this->alumno3->getNombre(),"puerta"=>$this->idcabina,"fecha"=>$this->fecha->format('Y-m-d'),"hora"=>$this->hora->format('H:i:s')];
     }
 
     /**

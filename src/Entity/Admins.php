@@ -17,7 +17,6 @@ class Admins
      *
      * @ORM\Column(name="nombre", type="string", length=45, nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $nombre;
 
@@ -29,4 +28,44 @@ class Admins
     private $hashclave;
 
 
+
+    /**
+     * Get the value of nombre
+     */
+    public function getNombre()
+    {
+        return $this->nombre;
+    }
+
+    /**
+     * Set the value of nombre
+     *
+     * @return self
+     */
+    public function setNombre($nombre) : self
+    {
+        $this->nombre = $nombre;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of hashclave
+     */
+    public function getHashclave()
+    {
+        return $this->hashclave;
+    }
+
+    /**
+     * Set the value of hashclave
+     *
+     * @return self
+     */
+    public function setHashclave($hashclave) : self
+    {
+        $this->hashclave = $hashclave;
+
+        return $this;
+    }
 }
