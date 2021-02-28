@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__.'/../src/Entity/Reservas.php';
+require_once __DIR__.'/../src/Entity/ReservaCamara.php';
 require_once __DIR__.'/../src/Entity/Alumnos.php';
 require_once __DIR__.'/../bootstrap.php';
 
@@ -22,7 +23,7 @@ function countReservasByAlumnoYFecha($alumno, $fecha)
     $query2->setParameter(":fecha", $fecha);
 
     $resultado = $query->getSingleScalarResult();
-    $resultado2 = $query->getSingleScalarResult();
+    $resultado2 = $query2->getSingleScalarResult();
     return $resultado+$resultado2;
 }
 
@@ -58,11 +59,18 @@ function hasReservasByAlumnosYFechaYHoraBetween($alumno, $fecha, $hora, $inicio,
     $query2->setParameter(":horaInicio", $horaInicio);
     $query2->setParameter(":horaFin", $horaFin);
     $query2->setParameter(":fecha", $fecha);
-    $resultado2 = $query->getSingleScalarResult();
+    $resultado2 = $query2->getSingleScalarResult();
 
     return $resultado+$resultado2 == 0;
 }
 
+/**
+ * getAlumnoByCorreo
+ *
+ * @param  EntityManager $entity
+ * @param  string $correo
+ * @return Alumnos||null
+ */
 function getAlumnoByCorreo($entity, $correo)
 {
     $query = $entity->createQuery("SELECT u from Alumnos u WHERE u.correo=:correo");
